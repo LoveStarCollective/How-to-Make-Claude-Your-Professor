@@ -11,7 +11,7 @@ even on stuff I knew nothing about, catching it when it's confidently wrong, bui
 a communication contract, and figuring out that half the flaws I kept blaming on the
 machine were really just me not being clear yet.
 
-**Read the whole thing here:** [[(https://lovestarcollective.github.io/How-to-Make-Claude-Your-Professor/)]
+**Read the whole thing here:** [(https://lovestarcollective.github.io/How-to-Make-Claude-Your-Professor/)]
 
 ---
 
