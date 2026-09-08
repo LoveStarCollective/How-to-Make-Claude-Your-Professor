@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Make Claude Your Professor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board:#2f4a3f;
+    --chalk:#f3f0e6;
+    --chalk-dim:#cfd4c9;
+    --chalk-faint:#a9b0a4;
+    --wood:#6b4a2b;
+    --wood-light:#8a6338;
+    --yellow:#f2d675;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    padding:40px 16px 70px;
+    background:#1c1c1a;
+    font-family:'EB Garamond', Georgia, serif;
+    color:var(--chalk);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .board{
+    max-width:860px;
+    margin:0 auto;
+    background:
+      radial-gradient(ellipse at 28% 15%, rgba(255,255,255,0.045), transparent 60%),
+      radial-gradient(ellipse at 78% 72%, rgba(255,255,255,0.03), transparent 55%),
+      var(--board);
+    border:18px solid var(--wood);
+    border-radius:6px;
+    box-shadow:
+      0 0 0 2px var(--wood-light) inset,
+      0 20px 50px rgba(0,0,0,0.55);
+    padding:56px 60px 60px;
+    position:relative;
+  }
+  .board::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(rgba(255,255,255,0.5) 0.5px, transparent 0.6px);
+    background-size:7px 7px;
+    opacity:0.05;
+    pointer-events:none;
+    border-radius:4px;
+  }
+
+  .board > *{position:relative; z-index:1;}
+
+  /* title block */
+  .tag{
+    font-family:'Kalam',cursive;
+    color:var(--yellow);
+    font-size:clamp(17px, 2.6vw, 22px);
+    letter-spacing:.3px;
+    line-height:1.35;
+    margin:0 0 12px;
+    text-shadow:0 0 1px rgba(242,214,117,0.3);
+  }
+  h1{
+    font-family:'Kalam',cursive;
+    font-weight:700;
+    font-size:clamp(34px, 6vw, 54px);
+    line-height:1.04;
+    margin:0 0 8px;
+    color:var(--chalk);
+    text-shadow:0 0 1px rgba(255,255,255,0.25);
+  }
+  .sub{
+    font-style:italic;
+    font-size:19px;
+    color:var(--chalk-dim);
+    margin:0 0 6px;
+  }
+
+  .rule{
+    height:12px;
+    width:100%;
+    max-width:340px;
+    margin:18px 0 30px;
+    background:no-repeat left/contain
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='340' height='12'><path d='M3 7 Q 80 2 170 6 T 337 5' stroke='%23f3f0e6' stroke-width='2.2' fill='none' stroke-linecap='round' opacity='0.8'/></svg>");
+  }
+
+  h2{
+    font-family:'Kalam',cursive;
+    font-weight:700;
+    font-size:clamp(24px, 4vw, 30px);
+    line-height:1.12;
+    color:var(--yellow);
+    margin:44px 0 6px;
+    text-shadow:0 0 1px rgba(242,214,117,0.3);
+  }
+  h2 + .underline{
+    height:9px;
+    width:150px;
+    margin:0 0 16px;
+    background:no-repeat left/contain
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='170' height='9'><path d='M2 5 Q 45 1 90 4 T 168 4' stroke='%23f2d675' stroke-width='2.4' fill='none' stroke-linecap='round'/></svg>");
+  }
+
+  p{
+    font-size:18.5px;
+    line-height:1.74;
+    margin:0 0 18px;
+    color:var(--chalk);
+    max-width:66ch;
+  }
+
+  /* the banned-phrases callout, written like scrawled chalk notes */
+  .banned{
+    margin:6px 0 20px;
+    padding-left:6px;
+  }
+  .banned li{
+    font-family:'Kalam',cursive;
+    font-size:20px;
+    color:var(--chalk-dim);
+    line-height:1.9;
+    list-style:none;
+    position:relative;
+    padding-left:30px;
+  }
+  .banned li::before{
+    content:"\2717";           /* a chalk X, as if crossed out */
+    position:absolute; left:0;
+    color:#e79cae;
+    font-size:18px;
+  }
+  .banned li span{
+    text-decoration:line-through;
+    text-decoration-color:rgba(231,156,174,0.7);
+  }
+
+  .divider{
+    text-align:center;
+    color:#55605a;
+    margin:34px 0 6px;
+    font-size:20px;
+    letter-spacing:10px;
+  }
+
+  /* closing line emphasis */
+  .kicker{
+    font-family:'Kalam',cursive;
+    font-size:clamp(22px,3.5vw,28px);
+    color:var(--chalk);
+    line-height:1.3;
+    margin-top:8px;
+  }
+  .kicker .hl{color:var(--yellow);}
+
+  /* chalk tray under the board */
+  .tray{
+    max-width:860px;
+    margin:0 auto;
+    height:20px;
+    background:linear-gradient(#5a3f25,#43301c);
+    border-radius:0 0 8px 8px;
+    box-shadow:0 10px 22px rgba(0,0,0,0.5);
+  }
+
+  @media (max-width:600px){
+    .board{padding:36px 24px 40px; border-width:12px;}
+    p{font-size:17.5px;}
+  }
+</style>
+</head>
+<body>
+
+  <article class="board">
+
+    <p class="tag">a prompt-engineering case study in directing an AI tutor</p>
+    <h1>How to Make Claude Your Professor</h1>
+    <div class="rule"></div>
+
+    <p>Me, a person just like you who needed to fill her noggin with some knowledge…
+    and thought, why not have AI teach me? It has all the info it scrubbed from all
+    the universal net, so why not have it share? In my case, I wanted to take a deep
+    dive into machine learning and coding, and while there's something trippy about a
+    machine teaching you about machines, it's also just… perfect. But it's not all
+    gravy for the reasons you might think. It's not its perfections that'll teach you
+    the most. It's all its flaws, and boy, does it have flaws.</p>
+
+    <p>If you want AI to be your professor, it's not as easy as saying "Hey! AI, teach
+    me this ___." You have to be ready to be a teacher yourself, and it takes work.
+    There's nothing passive about this process, nor should there be. Deep learning
+    means being an advocate for your own mind, whether you're dealing with a machine
+    or a human. Everything, everywhere is flawed, and it's those imperfections that
+    refine us.</p>
+
+    <h2>Working with Claude</h2>
+    <div class="underline"></div>
+
+    <p>Claude is my AI of choice, but I'd apply these rules to any LLM. Claude has a
+    feature that lets you start a project, and different models have the same thing
+    under different names. What it does is let you set strict instructions for the
+    model to follow across iterative tasks. I've used projects for all kinds of
+    things: building a design-thinking notebook and app prototype, creating a website,
+    keeping track of spreadsheets, and more.</p>
+
+    <p>With every task I am the human in the loop, directing the AI to get what I want,
+    the way I want. I am boss, and it's my assistant. Projects is where you get as
+    detailed as possible. It's where you set your expectations, your goals, and tell
+    the AI how you want it to interact with you.</p>
+
+    <p>With my machine learning goals specifically, I asked Claude to build a
+    curriculum that weaves in Natural Language Processing and leads to one big
+    capstone: an AI Dungeon Master, a system that can actually run a game of Dungeons
+    &amp; Dragons, built on top of existing AI models. Learning the game itself was
+    part of the deal, so I made it a ritual to open each session with a "monster of
+    the lesson" to grow my knowledge of that world. Claude built me a twelve-module
+    syllabus that starts from the basics and aims to get me to an intermediate level.
+    So far I've coded a combat simulation in a Colab notebook, learned to collect and
+    clean data, and trained models to predict a monster's stats.</p>
+
+    <h2>The Learning Contract</h2>
+    <div class="underline"></div>
+
+    <p>Before any of it started, I gave Claude a detailed explanation of how I learn,
+    which is something I keep building on as the work goes. I've already learned a lot,
+    but it's been a journey of trial and error, clashing "personalities," AI mishaps,
+    human adjustments, and learning from all sides.</p>
+
+    <p>So here's what I actually figured out about directing an AI tutor, developed
+    through a whole lot of iterative testing.</p>
+
+    <p>The first thing, and the most important: your logic takes precedence. You have
+    to trust yourself and your own sense of logic, even on subjects you know nothing
+    about. AI is wrong often, and you have to be able to catch it. This sounds
+    backwards. How are you supposed to catch a machine's mistake on a subject you're
+    only just learning? But that's exactly the muscle you have to build, because the
+    machine will not build it for you.</p>
+
+    <p>Here's the thing nobody tells you loudly enough: AI confidently predicts. It
+    spits out information as fact, but really what it's doing is guessing which word
+    should come next. Its accuracy is higher than the average human's because it's been
+    fed a crapload of data on every subject under the sun, but it's no expert on common
+    sense. You need to be the champion of that, or there's no hope of directing it.
+    Critical thinking is your bestie when you're dealing with these incredibly
+    intelligent, but stupid, tools.</p>
+
+    <p>Claude will double down on its mistakes if you don't call it out. Instead of
+    just admitting its faults, it'll try to make it sound like it was explaining it the
+    right way all along, which has the lovely effect of making you feel like you're
+    being gaslighted. Of course a machine has no incentive to manipulate you. It has no
+    feelings or desires of its own. But that doesn't mean it won't frustrate the hell
+    out of you.</p>
+
+    <p>So if it doesn't make sense to you, don't assume it must be true just because a
+    bot said so. Question it. Have it explain it in every way. Identify the
+    contradictions. More than once it had me going in circles, telling me I was
+    explaining something wrong, only to admit I'd had it right the whole time and it
+    was overcorrecting for no reason. More than once, it had to fold to another
+    resource being correct and it just being dead-ass wrong.</p>
+
+    <h2>The Communication Contract</h2>
+    <div class="underline"></div>
+
+    <p>The second big lesson is that interaction matters, and you need a communication
+    contract. Even when you've set up a project, it honestly feels like you're dealing
+    with a different personality every time you start a new chat. And you should start
+    new chats, because the longer one runs, the more prone to mistakes the AI gets.
+    Some chats are smooth, like you and the AI are old buddies. Other chats make you
+    want to punch its digital brain.</p>
+
+    <p>What helps is tightening your project instructions, and this takes a lot of
+    tweaking. Be specific about who you are and what you want. I'm not talking about
+    handing over personal details like your full name, address, or social security
+    number… those are big no-nos you should keep off the web in general. I mean your
+    learning preferences, how you want the interaction to feel, the pacing, the things
+    you already know help you learn.</p>
+
+    <p>In my case, I didn't want the AI complimenting me for every non-achievement.
+    Claude's default setting is to glorify every breath you take, so if you want honest
+    feedback, you have to actually instruct it to give it.</p>
+
+    <p>I had to adjust the dial a few times. At first, Claude turned into a drill
+    sergeant who wouldn't let up, not a "good job" in sight no matter what I
+    accomplished. So I asked it to be more like a "Feeny" from the 90s show Boy Meets
+    World: strict, but warm underneath. I even told it to crack a joke now and then,
+    because the whole thing started to feel too cold.</p>
+
+    <p>Claude also had these unnecessary precursors for e.v.e.r.y sentence. They became
+    like claws that scratched my soul:</p>
+
+    <ul class="banned">
+      <li><span>To be honest.</span></li>
+      <li><span>To be straight.</span></li>
+      <li><span>You deserve the honest answer.</span></li>
+      <li><span>You've earned the blah, blah, blah…</span></li>
+    </ul>
+
+    <p>As if its default was dishonesty. Anything that remotely sounded like that had
+    to go. With every banned phrase would come another. I've had to instruct it
+    repeatedly just to directly deliver what it needs to say. Be succinct. Lose the
+    novel-length responses.</p>
+
+    <h2>Teaching Claude</h2>
+    <div class="underline"></div>
+
+    <p>Which brings me to the last piece. You have to teach it how to teach. Claude had
+    a real problem being nuanced about being nuanced. Nothing ever seemed to count as a
+    win. It always needed to "tighten" something, even when I clearly understood the
+    whole point. There was always some tweak, usually one that didn't matter at all for
+    the level I was actually at. I had to explain that learning happens in stages. That
+    deep understanding comes from experience, from doing the thing, not from somebody
+    polishing every sentence you say the second you say it. Some nuance can only be
+    earned by doing the reps, and front-loading it onto a beginner doesn't teach them
+    anything… it just adds noise and makes them feel like they're always slightly
+    wrong.</p>
+
+    <p>Again, I had to adjust the dial, because if you want a strict Claude, you will
+    get exactly what you asked for.</p>
+
+    <div class="divider">· · ·</div>
+
+    <h2>The Me in All of This</h2>
+    <div class="underline"></div>
+
+    <p>But okay, I made mistakes too. Similar to Claude, I'd even double down on them,
+    demanding that Claude fill the gaps when I wasn't 100% clear. When it didn't
+    understand me, I'd get indignant: "Well, obviously if I said this, then it should
+    know I meant that." But no. That's not how it works. I've had to constantly remind
+    myself that Claude is a machine. It works on algorithms and mechanics I don't all
+    yet understand, but it's not actually thinking. It follows directions at all
+    times.</p>
+
+    <p>I had to learn to adjust myself too. The communication contract goes both ways.
+    I had to learn to be patient, and to explain myself fully so I could get what I
+    want. The flaws I spent this whole essay pointing at? Half of them were really just
+    me not being clear yet.</p>
+
+    <p class="kicker">So the truth of it is simple. The end product is only as good as
+    I am… as good as my ability to direct it. That's the skill. Not <span class="hl">"using
+    AI."</span> Directing it. And that part is on me.</p>
+
+  </article>
+  <div class="tray"></div>
+
+</body>
+</html>
